@@ -1,4 +1,4 @@
-module CLI-Task-Manager
+module github.com/FabriOrtiz40/CLI-Task-Manager
 
 go 1.25.5
 
