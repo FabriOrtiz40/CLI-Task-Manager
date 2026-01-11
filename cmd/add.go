@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/FabriOrtiz40/CLI-Task-Manager/db"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,18 @@ var addCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		task := strings.Join(args, " ")
-		fmt.Printf("This is a fake \"add\" command: %s\n", task)
+		dbConn, err := db.Open()
+		if err != nil {
+			panic(err)
+		}
+		defer dbConn.Close()
+
+		err = db.AddTask(dbConn, task)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Printf("Added \"%s\" to your task list.\n", task)
 	},
 }
 
