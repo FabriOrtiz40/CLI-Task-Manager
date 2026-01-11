@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/FabriOrtiz40/CLI-Task-Manager/db"
 	"github.com/spf13/cobra"
@@ -13,13 +14,17 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		dbConn, err := db.Open()
 		if err != nil {
-			panic(err)
+			fmt.Println("Error opening task database:", err)
+			os.Exit(1)
+
 		}
 		defer dbConn.Close()
 
 		tasks, err := db.ListTasks(dbConn)
 		if err != nil {
-			panic(err)
+			fmt.Println("Error listing tasks:", err)
+			os.Exit(1)
+
 		}
 
 		fmt.Println("You have the following tasks:")

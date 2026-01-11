@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/FabriOrtiz40/CLI-Task-Manager/db"
@@ -14,19 +15,17 @@ var doCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		idx, err := strconv.Atoi(args[0])
-		if err != nil {
-			panic(err)
-		}
-
 		dbConn, err := db.Open()
 		if err != nil {
-			panic(err)
+			fmt.Println("Error opening task database:", err)
+			os.Exit(1)
 		}
 		defer dbConn.Close()
 
 		err = db.DeleteTask(dbConn, idx)
 		if err != nil {
-			panic(err)
+			fmt.Println("Error completing task:", err)
+			os.Exit(1)
 		}
 
 		fmt.Printf("You have completed task %d.\n", idx)

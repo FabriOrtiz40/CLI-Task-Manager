@@ -3,6 +3,8 @@ package db
 import (
 	"encoding/binary"
 	"errors"
+	"os"
+	"path/filepath"
 
 	bolt "go.etcd.io/bbolt"
 )
@@ -12,7 +14,13 @@ var (
 )
 
 func Open() (*bolt.DB, error) {
-	return bolt.Open("tasks.db", 0600, nil)
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return nil, err
+	}
+
+	dbPath := filepath.Join(home, ".task.db")
+	return bolt.Open(dbPath, 0600, nil)
 }
 
 func AddTask(db *bolt.DB, task string) error {

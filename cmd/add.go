@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/FabriOrtiz40/CLI-Task-Manager/db"
@@ -16,13 +17,17 @@ var addCmd = &cobra.Command{
 		task := strings.Join(args, " ")
 		dbConn, err := db.Open()
 		if err != nil {
-			panic(err)
+			fmt.Println("Error opening task database:", err)
+			os.Exit(1)
+
 		}
 		defer dbConn.Close()
 
 		err = db.AddTask(dbConn, task)
 		if err != nil {
-			panic(err)
+			fmt.Println("Error adding task:", err)
+			os.Exit(1)
+
 		}
 
 		fmt.Printf("Added \"%s\" to your task list.\n", task)
